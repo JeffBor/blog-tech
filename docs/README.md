@@ -1,0 +1,3 @@
+# /docs
+
+Folder for content.
