@@ -4,7 +4,7 @@ This is a test of some terraform.
 
 ## Sample 1
 
-This is a sample.
+This is a sample.  What does it deploy?
 
 ```hcl
 provider "azurerm" {
@@ -14,7 +14,7 @@ provider "azurerm" {
 
 locals {
   storage_account_name = "sa${var.app_name}-${terraform.workspace}"
-  resource_group_name  = "rg${var.app_name}-${terraform.workspace}
+  resource_group_name  = "rg${var.app_name}-${terraform.workspace}"
 }
 
 resource "azurerm_resource_group" "rg" {
