@@ -1,6 +1,6 @@
 # Checking Azure AD Logs for Basic Authentication
 
-# https://www.enowsoftware.com/solutions-engine/microsoft-stops-basic-authentication-now-what
+# <https://www.enowsoftware.com/solutions-engine/microsoft-stops-basic-authentication-now-what>
 
 During the second half of 2021, [Microsoft will cease supporting Basic Authentication](https://techcommunity.microsoft.com/t5/exchange-team-blog/basic-authentication-and-exchange-online-april-2020-update/ba-p/1275508).  This sounds scary and yet another PITA thing we have to deal with thanks to Microsoft, or is it?  Fear is the first sign of wisdom, so let's get wise and figure out what we need to do before it gets us.
 
@@ -33,26 +33,35 @@ If you're not logged into your PowerShell session as an admin, you will get some
 ```text
 install-module : Administrator rights are required to install modules in ...
 ```
+
 No worries, actually this is not a bad thing.  Before you go and fire up another runas admin session, just consider doing this:
 
 ```powershell
 Install-Module -Name AzureAD -Scope CurrentUser
 ```
-This will enable the module for the current user.  Within seconds you should have AzureAD module installed: 
+
+This will enable the module for the current user.  Within seconds you should have AzureAD module installed:
+
 ```powershell
 Get-Module -Name AzureAD
 ```
+
 Next, let's authenticate to AAD:
+
 ```powershell
 Connect-AzureAD
 ```
+
 A window will pop up and prompt for authentication.  Needless to say, this is indeed Modern authentication happening here, and if enabled, multi-factor or even password-less will kick in.  Awesome!
 
 Now let's get some logs:
+
 ```powershell
 Get-AzureADAuditSignInLogs -Top 10
 ```
+
 If you do not have an Azure AD Premium license, then you may receive the following:
+
 ```text
 Get-AzureADAuditSignInLogs : Error occurred while executing GetAuditSignInLogs
 Code: Authentication_ApplicationHasNoDirectoryReadAccess
@@ -60,14 +69,17 @@ Message: Failed to do premium license check from ADGraph
 ```
 
 Let's try a different one:
+
 ```powershell
 Get-AzureADAuditDirectoryLogs -Top 10
 ```
+
 If you receive the following, this means permission need to be set correctly to read the Microsoft Graph:
+
 ```text
-Get-AzureADAuditDirectoryLogs : Error occurred while executing GetAuditDirectoryLogs 
+Get-AzureADAuditDirectoryLogs : Error occurred while executing GetAuditDirectoryLogs
 Code: Authentication_MSGraphPermissionMissing
 Message: Application missing MSGraph API 'Read all audit log data' permission
 ```
-Nope, one cannot just assume you can start reading reporting/audit data without permission!  Fear not; [I have an article on how to get this going via Terraform](msgraph-api-app-registration).
 
+Nope, one cannot just assume you can start reading reporting/audit data without permission!  Fear not; [I have an article on how to get this going via Terraform](msgraph-api-app-registration).
